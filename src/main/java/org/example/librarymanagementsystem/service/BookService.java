@@ -3,11 +3,16 @@ package org.example.librarymanagementsystem.service;
 
 import com.github.javafaker.Faker;
 import jakarta.annotation.PostConstruct;
+import org.example.librarymanagementsystem.exception.BookException;
+import org.example.librarymanagementsystem.exception.PatronException;
 import org.example.librarymanagementsystem.model.Book;
 import org.example.librarymanagementsystem.repository.BookRepository;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -42,17 +47,29 @@ public class BookService {
 
     public Book getBookById(Long id) {
         return bookRepository.findById(id)
-                .orElse(null);
+                .orElseThrow(() -> new BookException("this book is not found."));
     }
 
     public Book saveBook(Book book) {
         return bookRepository.save(book);
     }
 
-    public Book updateBook(Book book) {
-        return bookRepository.save(book);
+    public Optional<Book> updateBook(Long id, Book updatedBook) {
+        return Optional.ofNullable(bookRepository.findById(id)
+                .map(book -> {
+                    book.setTitle(updatedBook.getTitle());
+                    book.setAuthor(updatedBook.getAuthor());
+                    book.setIsbn(updatedBook.getIsbn());
+                    return bookRepository.save(book);
+                })
+                .orElseThrow(() -> new BookException("this book is not found.")));
     }
-    public void deleteBook(Long id) {
-        bookRepository.deleteById(id);
+    public boolean deleteBook(Long id) {
+        return bookRepository.findById(id)
+                .map(book -> {
+                    bookRepository.delete(book);
+                    return true;
+                })
+                .orElseThrow(() -> new BookException("this book is not found."));
     }
 }
