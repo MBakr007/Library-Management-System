@@ -102,7 +102,3 @@ You can test the API endpoints using Postman or any other API testing tool. Here
     - URL: `http://localhost:8080/api/books`
     - Method: GET
     - Response: A list of books in the system.
-
-## License
-
-This project is open-source and available under the [MIT License](LICENSE).
