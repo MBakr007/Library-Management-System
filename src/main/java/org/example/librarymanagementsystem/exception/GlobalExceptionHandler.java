@@ -12,14 +12,22 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BookException.class)
     public ResponseEntity<ErrorResponse> handleBookNotFoundException(BookException exception){
-        ErrorResponse errorDetails = new ErrorResponse(exception.getMessage(), HttpStatus.NOT_FOUND.value());
-        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+        ErrorResponse errorResponse = new ErrorResponse(exception.getMessage(), HttpStatus.NOT_FOUND.value());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(BookException.class)
+    @ExceptionHandler(PatronException.class)
     public ResponseEntity<ErrorResponse> handlePatronNotFoundException(PatronException exception){
-        ErrorResponse errorDetails = new ErrorResponse(exception.getMessage(), HttpStatus.NOT_FOUND.value());
-        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+        ErrorResponse errorResponse = new ErrorResponse(exception.getMessage(), HttpStatus.NOT_FOUND.value());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(BorrowingException.class)
+    public ResponseEntity<ErrorResponse> handlePatronOrBookNotFoundException(BorrowingException exception){
+        ErrorResponse errorResponse = new ErrorResponse(exception.getMessage(), HttpStatus.NOT_FOUND.value());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+
 
 }

@@ -5,5 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BorrowingRecordRepository extends JpaRepository<BorrowingRecord, Long> {
+public interface BorrowingRepository extends JpaRepository<BorrowingRecord, Long> {
+
+    public BorrowingRecord findBorrowingRecordByBookIdAndPatronId(Long bookId, Long patronId);
 }

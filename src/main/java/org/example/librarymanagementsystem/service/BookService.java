@@ -4,22 +4,20 @@ package org.example.librarymanagementsystem.service;
 import com.github.javafaker.Faker;
 import jakarta.annotation.PostConstruct;
 import org.example.librarymanagementsystem.exception.BookException;
-import org.example.librarymanagementsystem.exception.PatronException;
 import org.example.librarymanagementsystem.model.Book;
 import org.example.librarymanagementsystem.repository.BookRepository;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import static org.example.librarymanagementsystem.util.Constants.BOOK_NOT_FOUND;
 
 @Service
 public class BookService {
 
-    BookRepository bookRepository;
+    private final BookRepository bookRepository;
 
     public BookService(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
@@ -47,7 +45,7 @@ public class BookService {
 
     public Book getBookById(Long id) {
         return bookRepository.findById(id)
-                .orElseThrow(() -> new BookException("this book is not found."));
+                .orElseThrow(() -> new BookException(BOOK_NOT_FOUND));
     }
 
     public Book saveBook(Book book) {
@@ -62,7 +60,7 @@ public class BookService {
                     book.setIsbn(updatedBook.getIsbn());
                     return bookRepository.save(book);
                 })
-                .orElseThrow(() -> new BookException("this book is not found.")));
+                .orElseThrow(() -> new BookException(BOOK_NOT_FOUND)));
     }
     public boolean deleteBook(Long id) {
         return bookRepository.findById(id)
@@ -70,6 +68,6 @@ public class BookService {
                     bookRepository.delete(book);
                     return true;
                 })
-                .orElseThrow(() -> new BookException("this book is not found."));
+                .orElseThrow(() -> new BookException(BOOK_NOT_FOUND));
     }
 }
